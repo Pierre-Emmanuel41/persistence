@@ -2,6 +2,8 @@ package fr.pederobien.persistence.interfaces;
 
 import java.util.Map;
 
+import fr.pederobien.persistence.exceptions.LoaderNotFoundException;
+
 public interface ILoadersPersistence<T extends IUnmodifiableNominable, U extends IPersistenceLoader<T>> extends IPersistence<T> {
 
 	/**
