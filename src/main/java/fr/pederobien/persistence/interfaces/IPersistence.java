@@ -29,7 +29,7 @@ public interface IPersistence<T extends IUnmodifiableNominable> {
 	 * 
 	 * @throws FileNotFoundException If there is no file associated to the given name.
 	 */
-	IPersistence<T> load(String name) throws FileNotFoundException;
+	void load(String name) throws FileNotFoundException;
 
 	/**
 	 * @return The object this persistence managed.
@@ -43,7 +43,7 @@ public interface IPersistence<T extends IUnmodifiableNominable> {
 	 * 
 	 * @return This persistence.
 	 */
-	IPersistence<T> set(T elt);
+	void set(T elt);
 
 	/**
 	 * Save the current object managed by this persistence in the folder associated by the path returned by the method

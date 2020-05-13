@@ -25,7 +25,6 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import fr.pederobien.persistence.impl.AbstractLoadersPersistence;
-import fr.pederobien.persistence.interfaces.IPersistence;
 import fr.pederobien.persistence.interfaces.IUnmodifiableNominable;
 import fr.pederobien.persistence.interfaces.xml.IXmlPersistenceLoader;
 
@@ -48,7 +47,7 @@ public abstract class AbstractXmlPersistence<T extends IUnmodifiableNominable> e
 	}
 
 	@Override
-	public IPersistence<T> load(String name) throws FileNotFoundException {
+	public void load(String name) throws FileNotFoundException {
 		try {
 			Document doc = parse(name);
 			Element root = doc.getDocumentElement();
@@ -61,7 +60,6 @@ public abstract class AbstractXmlPersistence<T extends IUnmodifiableNominable> e
 		} catch (IOException e) {
 
 		}
-		return this;
 	}
 
 	@Override
@@ -70,9 +68,8 @@ public abstract class AbstractXmlPersistence<T extends IUnmodifiableNominable> e
 	}
 
 	@Override
-	public IPersistence<T> set(T elt) {
+	public void set(T elt) {
 		this.elt = elt;
-		return this;
 	}
 
 	@Override
