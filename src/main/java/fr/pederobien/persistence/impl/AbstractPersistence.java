@@ -9,7 +9,7 @@ public abstract class AbstractPersistence<T extends IUnmodifiableNominable> impl
 	private Path path;
 
 	protected AbstractPersistence(Path path) {
-		setInternalPath(path);
+		this.path = path;
 	}
 
 	@Override
@@ -19,15 +19,11 @@ public abstract class AbstractPersistence<T extends IUnmodifiableNominable> impl
 
 	@Override
 	public void setPath(Path path) {
-		throw new UnsupportedOperationException("This method cannot be called");
+		this.path = path;
 	}
 
 	@Override
 	public boolean forceUpdate() {
 		return false;
-	}
-
-	protected void setInternalPath(Path path) {
-		this.path = path;
 	}
 }
