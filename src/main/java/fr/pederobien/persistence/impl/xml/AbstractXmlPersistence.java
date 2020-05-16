@@ -311,7 +311,7 @@ public abstract class AbstractXmlPersistence<T extends IUnmodifiableNominable> e
 	 *
 	 * @see org.xml.sax.DocumentHandler
 	 */
-	protected Document parseFromURI(InputStream inputStream, String systemId) throws IOException {
+	protected Document parse(InputStream inputStream, String systemId) throws IOException {
 		try {
 			return builder.parse(inputStream, systemId);
 		} catch (SAXException e) {
