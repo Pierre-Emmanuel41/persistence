@@ -3,6 +3,7 @@ package fr.pederobien.persistence.impl.xml;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import fr.pederobien.persistence.impl.AbstractLoadersPersistence;
@@ -46,10 +48,20 @@ public abstract class AbstractXmlPersistence<T extends IUnmodifiableNominable> e
 		}
 	}
 
+	/**
+	 * Create a {@link Document} from the given parameters. In most case, the array contains only the xml file's name.
+	 * 
+	 * @param objects An array that contains needed parameters to create a Document.
+	 * 
+	 * @return A document associated to the given parameter.
+	 * @throws IOException If any IO errors occur.
+	 */
+	protected abstract Document createDoc(Object... objects) throws IOException;
+
 	@Override
 	public void load(String name) throws FileNotFoundException {
 		try {
-			Document doc = parse(name);
+			Document doc = createDoc(name);
 			Element root = doc.getDocumentElement();
 			Node version = root.getElementsByTagName(VERSION).item(0);
 
@@ -193,9 +205,115 @@ public abstract class AbstractXmlPersistence<T extends IUnmodifiableNominable> e
 		setAttribute(element, tag.toString(), value.toString());
 	}
 
-	private Document parse(String name) throws IOException {
+	/**
+	 * Parse the content of the given file using {@link #getAbsolutePath(String)} as an XML document and return a new DOM
+	 * {@link Document} object. An <code>IllegalArgumentException</code> is thrown if the <code>File</code> is <code>null</code> null.
+	 *
+	 * @param f The file containing the XML to parse.
+	 *
+	 * @throws IOException              If any IO errors occur.
+	 * @throws SAXException             If any parse errors occur.
+	 * @throws IllegalArgumentException When <code>f</code> is <code>null</code>
+	 *
+	 * @see org.xml.sax.DocumentHandler
+	 * @return A new DOM Document object.
+	 */
+	protected Document parseFromFileName(String name) throws IOException {
 		try {
 			return builder.parse(getAbsolutePath(name).toFile());
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Parse the content of the given input source as an XML document and return a new DOM {@link Document} object. An
+	 * <code>IllegalArgumentException</code> is thrown if the <code>InputSource</code> is <code>null</code> null.
+	 *
+	 * @param is InputSource containing the content to be parsed.
+	 *
+	 * @return A new DOM Document object.
+	 *
+	 * @throws IOException              If any IO errors occur.
+	 * @throws SAXException             If any parse errors occur.
+	 * @throws IllegalArgumentException When <code>is</code> is <code>null</code>
+	 *
+	 * @see org.xml.sax.DocumentHandler
+	 */
+	protected Document parse(InputSource inputSource) throws IOException {
+		try {
+			return builder.parse(inputSource);
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Parse the content of the given <code>InputStream</code> as an XML document and return a new DOM {@link Document} object. An
+	 * <code>IllegalArgumentException</code> is thrown if the <code>InputStream</code> is null.
+	 *
+	 * @param is InputStream containing the content to be parsed.
+	 *
+	 * @return <code>Document</code> result of parsing the <code>InputStream</code>
+	 *
+	 * @throws IOException              If any IO errors occur.
+	 * @throws SAXException             If any parse errors occur.
+	 * @throws IllegalArgumentException When <code>is</code> is <code>null</code>
+	 *
+	 * @see org.xml.sax.DocumentHandler
+	 */
+	protected Document parse(InputStream inputStream) throws IOException {
+		try {
+			return builder.parse(inputStream);
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Parse the content of the given URI as an XML document and return a new DOM {@link Document} object. An
+	 * <code>IllegalArgumentException</code> is thrown if the URI is <code>null</code> null.
+	 *
+	 * @param uri The location of the content to be parsed.
+	 *
+	 * @return A new DOM Document object.
+	 *
+	 * @throws IOException              If any IO errors occur.
+	 * @throws SAXException             If any parse errors occur.
+	 * @throws IllegalArgumentException When <code>uri</code> is <code>null</code>
+	 *
+	 * @see org.xml.sax.DocumentHandler
+	 */
+	protected Document parseFromURI(String uri) throws IOException {
+		try {
+			return builder.parse(uri);
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Parse the content of the given <code>InputStream</code> as an XML document and return a new DOM {@link Document} object. An
+	 * <code>IllegalArgumentException</code> is thrown if the <code>InputStream</code> is null.
+	 *
+	 * @param is       InputStream containing the content to be parsed.
+	 * @param systemId Provide a base for resolving relative URIs.
+	 *
+	 * @return A new DOM Document object.
+	 *
+	 * @throws IOException              If any IO errors occur.
+	 * @throws SAXException             If any parse errors occur.
+	 * @throws IllegalArgumentException When <code>is</code> is <code>null</code>
+	 *
+	 * @see org.xml.sax.DocumentHandler
+	 */
+	protected Document parseFromURI(InputStream inputStream, String systemId) throws IOException {
+		try {
+			return builder.parse(inputStream, systemId);
 		} catch (SAXException e) {
 			e.printStackTrace();
 		}
