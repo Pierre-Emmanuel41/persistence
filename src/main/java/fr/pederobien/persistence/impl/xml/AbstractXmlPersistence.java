@@ -70,7 +70,7 @@ public abstract class AbstractXmlPersistence<T extends IUnmodifiableNominable> e
 			// Third: set the object coming from the loader.
 			set(getLoader(Double.parseDouble(version.getChildNodes().item(0).getNodeValue())).load(root).get());
 		} catch (IOException e) {
-
+			throw new FileNotFoundException();
 		}
 	}
 
