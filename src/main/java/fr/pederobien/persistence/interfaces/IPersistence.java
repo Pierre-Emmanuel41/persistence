@@ -101,4 +101,9 @@ public interface IPersistence<T extends IUnmodifiableNominable> {
 	 *         be used when persistence is under development.
 	 */
 	boolean forceUpdate();
+
+	/**
+	 * Method called if the method {@link #forceUpdate()} returns true.
+	 */
+	void update();
 }

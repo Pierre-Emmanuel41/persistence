@@ -26,4 +26,9 @@ public abstract class AbstractPersistence<T extends IUnmodifiableNominable> impl
 	public boolean forceUpdate() {
 		return false;
 	}
+
+	@Override
+	public void update() {
+
+	}
 }
