@@ -1,19 +1,17 @@
 package fr.pederobien.persistence.impl;
 
-
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
 import fr.pederobien.persistence.interfaces.IPersistenceLoader;
 import fr.pederobien.persistence.interfaces.IUnmodifiableNominable;
 
-public class AbstractPersistenceLoader<T extends IUnmodifiableNominable> implements IPersistenceLoader<T> {
+public abstract class AbstractPersistenceLoader<T extends IUnmodifiableNominable> implements IPersistenceLoader<T> {
 	private Double version;
 	private T elt;
 
-	protected AbstractPersistenceLoader(Double version, T elt) {
+	protected AbstractPersistenceLoader(Double version) {
 		this.version = version;
-		this.elt = elt;
 	}
 
 	@Override
@@ -25,6 +23,21 @@ public class AbstractPersistenceLoader<T extends IUnmodifiableNominable> impleme
 	public T get() {
 		return elt;
 	}
+
+	/**
+	 * Set the element managed by this loader. After calling this method, the method {@link #get()} return the result of the method
+	 * {@link #create()}.
+	 */
+	protected void createNewElement() {
+		elt = create();
+	}
+
+	/**
+	 * Create a new element managed by this persistence loader.
+	 * 
+	 * @return The element to modify when loading a file.
+	 */
+	protected abstract T create();
 
 	/**
 	 * Parses the string argument as a signed decimal integer. The characters in the string must all be decimal digits, except that

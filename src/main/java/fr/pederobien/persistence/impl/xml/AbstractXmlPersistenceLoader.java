@@ -12,8 +12,8 @@ import fr.pederobien.persistence.interfaces.xml.IXmlPersistenceLoader;
 
 public abstract class AbstractXmlPersistenceLoader<T extends IUnmodifiableNominable> extends AbstractPersistenceLoader<T> implements IXmlPersistenceLoader<T> {
 
-	protected AbstractXmlPersistenceLoader(Double version, T elt) {
-		super(version, elt);
+	protected AbstractXmlPersistenceLoader(Double version) {
+		super(version);
 	}
 
 	/**
