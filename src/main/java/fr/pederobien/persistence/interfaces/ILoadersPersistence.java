@@ -4,7 +4,7 @@ import java.util.Map;
 
 import fr.pederobien.persistence.exceptions.LoaderNotFoundException;
 
-public interface ILoadersPersistence<T extends IUnmodifiableNominable, U extends IPersistenceLoader<T>> extends IPersistence<T> {
+public interface ILoadersPersistence<T, U extends IPersistenceLoader<T>> extends IPersistence<T> {
 
 	/**
 	 * Register this loader to this persistence. If there is already a loader associated to the version of the given loader, the old

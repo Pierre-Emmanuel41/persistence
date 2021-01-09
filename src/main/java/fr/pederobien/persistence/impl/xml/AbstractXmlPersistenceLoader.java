@@ -7,10 +7,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import fr.pederobien.persistence.impl.AbstractPersistenceLoader;
-import fr.pederobien.persistence.interfaces.IUnmodifiableNominable;
 import fr.pederobien.persistence.interfaces.xml.IXmlPersistenceLoader;
 
-public abstract class AbstractXmlPersistenceLoader<T extends IUnmodifiableNominable> extends AbstractPersistenceLoader<T> implements IXmlPersistenceLoader<T> {
+public abstract class AbstractXmlPersistenceLoader<T> extends AbstractPersistenceLoader<T> implements IXmlPersistenceLoader<T> {
 
 	protected AbstractXmlPersistenceLoader(Double version) {
 		super(version);

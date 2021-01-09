@@ -27,10 +27,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import fr.pederobien.persistence.impl.AbstractLoadersPersistence;
-import fr.pederobien.persistence.interfaces.IUnmodifiableNominable;
 import fr.pederobien.persistence.interfaces.xml.IXmlPersistenceLoader;
 
-public abstract class AbstractXmlPersistence<T extends IUnmodifiableNominable> extends AbstractLoadersPersistence<T, IXmlPersistenceLoader<T>> {
+public abstract class AbstractXmlPersistence<T> extends AbstractLoadersPersistence<T, IXmlPersistenceLoader<T>> {
 	private static final String EXTENSION = ".xml";
 	protected static final String VERSION = "version";
 	private DocumentBuilder builder;
@@ -106,14 +105,6 @@ public abstract class AbstractXmlPersistence<T extends IUnmodifiableNominable> e
 	@Override
 	public Path getAbsolutePath(String name) {
 		return getPath().resolve(Paths.get(name + EXTENSION));
-	}
-
-	/**
-	 * @return The absolute path associated to the object this persistence managed. It is equivalent to call
-	 *         {@link #getAbsolutePath(String)} with parameter path equals the name of the object returned by {@link #get()}
-	 */
-	protected Path getAbsolutePath() {
-		return getAbsolutePath(get().getName());
 	}
 
 	/**

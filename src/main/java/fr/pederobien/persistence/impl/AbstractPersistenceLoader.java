@@ -4,9 +4,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
 import fr.pederobien.persistence.interfaces.IPersistenceLoader;
-import fr.pederobien.persistence.interfaces.IUnmodifiableNominable;
 
-public abstract class AbstractPersistenceLoader<T extends IUnmodifiableNominable> implements IPersistenceLoader<T> {
+public abstract class AbstractPersistenceLoader<T> implements IPersistenceLoader<T> {
 	private Double version;
 	private T elt;
 

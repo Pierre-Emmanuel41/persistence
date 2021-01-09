@@ -3,9 +3,8 @@ package fr.pederobien.persistence.impl;
 import java.nio.file.Path;
 
 import fr.pederobien.persistence.interfaces.IPersistence;
-import fr.pederobien.persistence.interfaces.IUnmodifiableNominable;
 
-public abstract class AbstractPersistence<T extends IUnmodifiableNominable> implements IPersistence<T> {
+public abstract class AbstractPersistence<T> implements IPersistence<T> {
 	private Path path;
 
 	protected AbstractPersistence(Path path) {

@@ -3,9 +3,8 @@ package fr.pederobien.persistence.interfaces.xml;
 import org.w3c.dom.Element;
 
 import fr.pederobien.persistence.interfaces.IPersistenceLoader;
-import fr.pederobien.persistence.interfaces.IUnmodifiableNominable;
 
-public interface IXmlPersistenceLoader<T extends IUnmodifiableNominable> extends IPersistenceLoader<T> {
+public interface IXmlPersistenceLoader<T> extends IPersistenceLoader<T> {
 
 	/**
 	 * Load data coming from the given root.

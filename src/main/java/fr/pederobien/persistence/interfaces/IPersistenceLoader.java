@@ -1,6 +1,6 @@
 package fr.pederobien.persistence.interfaces;
 
-public interface IPersistenceLoader<T extends IUnmodifiableNominable> {
+public interface IPersistenceLoader<T> {
 
 	/**
 	 * @return The version of this loader.

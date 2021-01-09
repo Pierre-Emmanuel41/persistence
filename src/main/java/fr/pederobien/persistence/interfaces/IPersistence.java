@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public interface IPersistence<T extends IUnmodifiableNominable> {
+public interface IPersistence<T> {
 
 	/**
 	 * @return The path of the folder in which this persistence load and save objects it managed.

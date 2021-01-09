@@ -9,10 +9,8 @@ import java.util.TreeMap;
 import fr.pederobien.persistence.exceptions.LoaderNotFoundException;
 import fr.pederobien.persistence.interfaces.ILoadersPersistence;
 import fr.pederobien.persistence.interfaces.IPersistenceLoader;
-import fr.pederobien.persistence.interfaces.IUnmodifiableNominable;
 
-public abstract class AbstractLoadersPersistence<T extends IUnmodifiableNominable, U extends IPersistenceLoader<T>> extends AbstractPersistence<T>
-		implements ILoadersPersistence<T, U> {
+public abstract class AbstractLoadersPersistence<T, U extends IPersistenceLoader<T>> extends AbstractPersistence<T> implements ILoadersPersistence<T, U> {
 	private NavigableMap<Double, U> loaders;
 
 	protected AbstractLoadersPersistence(Path path) {
