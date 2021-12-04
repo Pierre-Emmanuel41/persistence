@@ -1,14 +1,17 @@
-# Persistence
+# Presentation
 
 This project is a simple tool that simplify the way to use java xml API. It is useful when you need to save and/or load data from an xml file.
 This api provides also a simple management of the save version number.
 
-# Register as maven dependency
+# Download
 
-It is easy to register this project as dependency for your own project. To do so, you need to download this project.
-First, you need to download this project on your machine. The easiest way to do so is to use the following git command line "git clone https://github.com/Pierre-Emmanuel41/persistence.git".
-Then, you need to run the following maven command line "mvn clean package install". This will create the archive of this project in your .m2 folder.
-Finally, in the pom.xml of your project, you have to add the following lines :
+First you need to download this project on your computer. To do so, you can use the following command line :
+
+```git
+git clone https://github.com/Pierre-Emmanuel41/persistence.git --recursive
+```
+
+and then double click on the deploy.bat file. This will deploy this project and all its dependencies on your computer. Which means it generates the folder associated to this project and its dependencies in your .m2 folder. Once this has been done, you can add the project as maven dependency on your maven project :
 
 ```xml
 <dependency>
@@ -17,6 +20,5 @@ Finally, in the pom.xml of your project, you have to add the following lines :
 	<version>2.0-SNAPSHOT</version>
 </dependency>
 ```
-You can now use features provided by this api in you project.
 
 To see how you can use thoses features, please have a look to [This tutorial](https://github.com/Pierre-Emmanuel41/persistence/blob/master/Tutorial.md)
