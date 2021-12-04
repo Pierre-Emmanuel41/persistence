@@ -23,25 +23,25 @@ Let's say we want to save a person. A person is defined by its name and its birt
 		}
 
 		/**
-		 * Set the character name.
+		 * Set the person name.
 		 * 
-		 * @param name The character name.
+		 * @param name The person name.
 		 */
 		public void setName(String name) {
 			this.name = name;
 		}
 
 		/**
-		 * @return The character birthday.
+		 * @return The person birthday.
 		 */
 		public LocalDate getBirthday() {
 			return birthday;
 		}
 
 		/**
-		 * Set the character birthday.
+		 * Set the person birthday.
 		 * 
-		 * @param birthday The character birthday.
+		 * @param birthday The person birthday.
 		 */
 		public void setBirthday(LocalDate birthday) {
 			this.birthday = birthday;
