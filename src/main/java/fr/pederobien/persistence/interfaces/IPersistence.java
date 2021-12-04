@@ -1,109 +1,85 @@
 package fr.pederobien.persistence.interfaces;
 
-import java.io.FileNotFoundException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import java.util.Map;
 
-public interface IPersistence<T> {
+import fr.pederobien.persistence.exceptions.ExtensionException;
+import fr.pederobien.persistence.exceptions.SerializerNotFoundException;
+import fr.pederobien.persistence.exceptions.SerializerRegisteredException;
+
+public interface IPersistence<T, U extends ISerializer<T>> {
+	public static final int LATEST = -1;
 
 	/**
-	 * @return The path of the folder in which this persistence load and save objects it managed.
+	 * @return The file extension associated to this persistence.
 	 */
-	Path getPath();
+	String getExtension();
 
 	/**
-	 * Set the path to the folder in which this persistence should save its data.
-	 * 
-	 * @param path The path to the folder.
-	 */
-	void setPath(Path path);
-
-	/**
-	 * Load and create an object of type <code>T</code>. If there is no file associated to the given name in the folder associated to
-	 * the path returned by {@link #getPath()}, the method throws a FileNotFoundException.
-	 * 
-	 * @param name The name used to load and create a T object.
-	 * 
-	 * @return This persistence.
-	 * 
-	 * @throws FileNotFoundException If there is no file associated to the given name.
-	 */
-	void load(String name) throws FileNotFoundException;
-
-	/**
-	 * @return The object this persistence managed.
-	 */
-	T get();
-
-	/**
-	 * Set the element to load/save.
-	 * 
-	 * @param elt The element to load/save.
-	 * 
-	 * @return This persistence.
-	 */
-	void set(T elt);
-
-	/**
-	 * Save the current object managed by this persistence in the folder associated by the path returned by the method
-	 * {@link #getPath()}.
-	 * 
-	 * @return True if everything went right, false otherwise.
-	 */
-	boolean save();
-
-	/**
-	 * Check if there is a file associated to the given name in the folder associated by the path returned by the method
-	 * {@link #getPath()}.
-	 * 
-	 * @param name The name used to verify the existence of a file with the same name.
-	 * 
-	 * @return True if the file exist, false otherwise.
-	 */
-	boolean exist(String name);
-
-	/**
-	 * Delete the file associated to the given name from the folder associated by the path returned by the method {@link #getPath()}.
-	 * 
-	 * @param name The name of the file to delete.
-	 * 
-	 * @return true if the file has been deleted, false otherwise.
-	 */
-	boolean delete(String name);
-
-	/**
-	 * @return The list of file's name in the folder associated by the path returned by the method {@link #getPath()}.
-	 */
-	List<String> list();
-
-	/**
-	 * Return the absolute path associated to the given name.
-	 * 
-	 * @param name The name used to get the absolute path.
-	 * 
-	 * @return A path that correspond to <code>getPath().resolve(Paths.get(name + ".xml"))</code>
-	 * 
-	 * @see #getPath()
-	 * @see Paths#get(String, String...)
-	 * @see Path#resolve(Path)
-	 */
-	Path getAbsolutePath(String name);
-
-	/**
-	 * @return The current version number of this persistence. This number is used to update the default content when version has
-	 *         changed.
+	 * @return The version associated to this persistence, it correspond to the latest registered {@link ISerializer}.
 	 */
 	Double getVersion();
 
 	/**
-	 * @return True if the default content should be update whenever the associated file exists, false otherwise. This method should
-	 *         be used when persistence is under development.
+	 * Load the file associated to the given path, and update the element properties.
+	 * 
+	 * @param element The element that contains data registered in the configuration file.
+	 * @param path    The path leading to the configuration file. It should contains the file name and the extension.
+	 * 
+	 * @return True if the element has been successfully updated, false otherwise.
+	 * 
+	 * @throws ExtensionException If the extension associated to the file to deserialize does not match with the extension of this
+	 *                            persistence.
 	 */
-	boolean forceUpdate();
+	boolean deserialize(T element, String path);
 
 	/**
-	 * Method called if the method {@link #forceUpdate()} returns true.
+	 * Save the element properties in a file associated to the specified path. If the path does not end with the extension associated
+	 * to this persistence it is automatically added. If some intermediate directories are missing they are automatically created.
+	 * 
+	 * @param element the element that contains informations to save.
+	 * @param version The version in which the informations should be saved.
+	 * @param path    The path leading to the configuration file. It should contains the file name.
+	 * 
+	 * @return True if the save went well.
+	 * 
+	 * @throws SerializerNotFoundException If there are no serializer associated to the given version.
 	 */
-	void update();
+	boolean serialize(T element, double version, String path);
+
+	/**
+	 * Register this serializer to this persistence. If there is already a serializer associated to the version of the given
+	 * serializer, the old serializer will be replaced.
+	 * 
+	 * @param serializer The serializer used to load data.
+	 * 
+	 * @return This persistence to register serializers easier.
+	 * 
+	 * @throws SerializerRegisteredException If a serializer is already registered for the version of the specified serializer.
+	 */
+	IPersistence<T, U> register(U serializer);
+
+	/**
+	 * Unregister the serializer associated to the given version.
+	 * 
+	 * @param version The version of the serializer to unregister.
+	 * 
+	 * @return This persistence to unregister serializers easier.
+	 */
+	IPersistence<T, U> unregister(double version);
+
+	/**
+	 * @return A map that contains all registered serializers to this persistence. This map is unmodifiable.
+	 */
+	Map<Double, ? extends U> getSerializers();
+
+	/**
+	 * Get the serializer associated to the given version.
+	 * 
+	 * @param version The version used to get the associated serializer.
+	 * 
+	 * @return The associated serializer.
+	 * 
+	 * @throws SerializerNotFoundException If there is no registered serializer for the given version number
+	 */
+	U getSerializer(double version);
 }

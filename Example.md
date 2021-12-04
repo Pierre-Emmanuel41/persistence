@@ -1,25 +1,27 @@
 # Example
 
-Let's say we want to save a character. A character is defined by its name and its birthday. The class associated to a character should looks like the following :
+Let's say we want to save a person. A person is defined by its name and its birthday. The class associated to a person should looks like the following :
 
 ```java
-	public class Character implements IUnmodifiableNominable {
+	public static class Person {
 		private String name;
 		private LocalDate birthday;
-	
-		public Character() {
+
+		public Person() {
 		}
-	
-		public Character(String name, LocalDate birthday) {
+
+		public Person(String name, LocalDate birthday) {
 			this.name = name;
 			this.birthday = birthday;
 		}
-	
-		@Override
+
+		/**
+		 * @return The person name.
+		 */
 		public String getName() {
 			return name;
 		}
-	
+
 		/**
 		 * Set the character name.
 		 * 
@@ -28,14 +30,14 @@ Let's say we want to save a character. A character is defined by its name and it
 		public void setName(String name) {
 			this.name = name;
 		}
-	
+
 		/**
 		 * @return The character birthday.
 		 */
 		public LocalDate getBirthday() {
 			return birthday;
 		}
-	
+
 		/**
 		 * Set the character birthday.
 		 * 
@@ -47,118 +49,68 @@ Let's say we want to save a character. A character is defined by its name and it
 	}
 ```
 
-I created an intermediate class from which each loader will inherits :
+And then you have to create your own serializer which should extends <code>AbsractXmlSerializer</code> :
 
 ```java
-	public abstract class AbstractIntermediateXmlLoader extends AbstractXmlPersistenceLoader<Character> {
-	
-		protected AbstractIntermediateXmlLoader(Double version) {
-			super(version);
-		}
-	
-		@Override
-		protected Character create() {
-			return new Character();
-		}
-	
-		/**
-		 * Set the character name.
-		 * 
-		 * @param root The xml root that contains all character properties.
-		 */
-		protected void setName(Element root) {
-			Node name = getElementsByTagName(root, "name").item(0);
-			get().setName(name.getChildNodes().item(0).getNodeValue());
-		}
-	
-		/**
-		 * Set the character birhtday.
-		 * 
-		 * @param root The xml root that contains all character properties.
-		 */
-		protected void setBirthday(Element root) {
-			Node birthday = getElementsByTagName(root, "birthday").item(0);
-			get().setBirthday(LocalDate.parse(birthday.getChildNodes().item(0).getNodeValue()));
-		}
-	}
-```
+		public static class PersonSerializerV10 extends AbstractXmlSerializer<Person> {
 
-And then I created the loader for the first version :
-
-```java
-	public class CharacterLoaderV10 extends AbstractIntermediateXmlLoader {
-	
-		protected CharacterLoaderV10() {
+		public PersonSerializerV10() {
 			super(1.0);
 		}
-	
+
 		@Override
-		public IXmlPersistenceLoader<Character> load(Element root) {
+		public boolean deserialize(Person element, Element root) {
 			// Set the character name
-			setName(root);
-	
+			Node name = getElementsByTagName(root, "name").item(0);
+			element.setName(name.getChildNodes().item(0).getNodeValue());
+
 			// Set the character birthday.
-			setBirthday(root);
-			return this;
+			Node birthday = getElementsByTagName(root, "birthday").item(0);
+			element.setBirthday(LocalDate.parse(birthday.getChildNodes().item(0).getNodeValue()));
+
+			return true;
+		}
+
+		@Override
+		public boolean serialize(Person element, Element root) {
+			// Set the character name
+			Element name = createElement("name");
+			name.appendChild(createTextNode(element.getName()));
+			root.appendChild(name);
+
+			// Set the character birthday.
+			Element birthday = createElement("birthday");
+			birthday.appendChild(createTextNode(element.getBirthday().toString()));
+			root.appendChild(birthday);
+
+			return true;
 		}
 	}
 ```
 
-Finally, I created the character persistence :
+and register it in a persistence of your choice:
 
 ```java
-	public class CharacterPersistence extends AbstractXmlPersistence<Character> {
-	
-		public CharacterPersistence(Path path) {
-			super(path);
-			register(new CharacterLoaderV10());
-		}
-	
-		@Override
-		public boolean save() {
-			Document doc = newDocument();
-			doc.setXmlStandalone(true);
-	
-			Element root = createElement(doc, "character");
-			doc.appendChild(root);
-	
-			Element version = createElement(doc, VERSION);
-			doc.appendChild(doc.createTextNode(getVersion().toString()));
-			root.appendChild(version);
-	
-			Element name = createElement(doc, "name");
-			name.appendChild(doc.createTextNode(get().getName()));
-			root.appendChild(name);
-	
-			Element birthday = createElement(doc, "birthday");
-			birthday.appendChild(doc.createTextNode(get().getBirthday().toString()));
-			root.appendChild(birthday);
-	
-			saveDocument(doc, get().getName());
-			return false;
-		}
-	
-		@Override
-		protected Document createDoc(Object... objects) throws IOException {
-			return parseFromFileName((String) objects[0]);
-		}
-	}
+	XmlPersistence<Person> personPersistence = Persistences.xmlPersistence();
+	personPersistence.register(persistence.adapt(new PersonSerializerV10());
 ```
 
-In order to save a character you only need to create a character, set the new character as the one to save for you persistence and finally call the method save :
+In order to save the data of a person, you only need to call the method <code>serialize</code> from the persistence, and to load you only need to call method <code>deserialize</code> from the persistence.
 
 ```java
 	public static void main(String[] args) {
-		// Character born at 5th April 1994.
-		Character character = new Character("Main character", LocalDate.of(1994, 4, 5));
-		
+		String path = "";
+		// Person born the 5th April 1994.
+		Person person = new Person("Main person", LocalDate.of(1994, 4, 5));
+
 		// <path> has to be changed for compilation.
-		IPeristence<Character> persistence = new CharacterPersistence(<path>);
-		persistence.set(character);
-		persistence.save();
+		XmlPersistence<Person> persistence = Persistences.xmlPersistence();
+		persistence.register(persistence.adapt(new PersonSerializerV10()));
 		
+		// To save
+		persistence.serialize(person, IPersistence.LATEST, path.concat("Main_Person.xml"));
+
 		// To load
-		persistence.load("Main character");
-		Character loadCharacter = persistence.get();
+		persistence.deserialize(new Person(), path.concat("Main_Person.xml"));
 	}
 ```

@@ -14,7 +14,7 @@ Finally, in the pom.xml of your project, you have to add the following lines :
 <dependency>
 	<groupId>fr.pederobien</groupId>
 	<artifactId>persistence</artifactId>
-	<version>1.0</version>
+	<version>2.0-SNAPSHOT</version>
 </dependency>
 ```
 You can now use features provided by this api in you project.

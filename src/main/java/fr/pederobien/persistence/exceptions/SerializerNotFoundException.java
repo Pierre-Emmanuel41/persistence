@@ -1,11 +1,11 @@
 package fr.pederobien.persistence.exceptions;
 
-public class LoaderNotFoundException extends RuntimeException {
+public class SerializerNotFoundException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	private double version;
 
-	public LoaderNotFoundException(double version) {
-		super("No loader found for version : " + version);
+	public SerializerNotFoundException(double version) {
+		super("No serializer found for version : " + version);
 		this.version = version;
 	}
 
