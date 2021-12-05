@@ -56,13 +56,14 @@ public abstract class AbstractXmlSerializerAdapter<T> extends AbstractSerializer
 	 */
 	protected File createFile(Document document, String path) throws TransformerFactoryConfigurationError, TransformerException, IOException {
 		Path pathFile = Paths.get(path);
+		File file = pathFile.toFile();
 		File folder = pathFile.getParent().toFile();
 		if (!folder.exists())
 			folder.mkdirs();
 		Transformer transformer = TransformerFactory.newInstance().newTransformer();
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		transformer.transform(new DOMSource(document), new StreamResult(pathFile.toFile()));
-		return folder;
+		transformer.transform(new DOMSource(document), new StreamResult(file));
+		return file;
 	}
 }
