@@ -44,7 +44,7 @@ public class JarXmlPersistence<T> extends AbstractXmlPersistence<T, JarXmlSerial
 			// Step 2: Update the element properties
 			return adapter.getXmlSerializer().deserialize(element, root);
 		} catch (Exception e) {
-			e.printStackTrace();
+			return false;
 		} finally {
 			if (jar != null)
 				try {
@@ -53,8 +53,6 @@ public class JarXmlPersistence<T> extends AbstractXmlPersistence<T, JarXmlSerial
 					// Do nothing
 				}
 		}
-
-		return false;
 	}
 
 	/**

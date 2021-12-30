@@ -29,9 +29,8 @@ public class XmlPersistence<T> extends AbstractXmlPersistence<T, XmlSerializerAd
 			// Step 2: Update the element properties
 			return adapter.getXmlSerializer().deserialize(element, root);
 		} catch (Exception e) {
-			e.printStackTrace();
+			return false;
 		}
-		return false;
 	}
 
 	/**
