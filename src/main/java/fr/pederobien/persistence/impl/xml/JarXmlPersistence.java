@@ -23,7 +23,7 @@ public class JarXmlPersistence<T> extends AbstractXmlPersistence<T, JarXmlSerial
 	}
 
 	@Override
-	public boolean deserialize(T element, String path) {
+	public void deserialize(T element, String path) throws Exception {
 		if (!path.endsWith(getExtension()))
 			throw new ExtensionException(getExtension(), path.substring(path.lastIndexOf(".")));
 
@@ -42,9 +42,7 @@ public class JarXmlPersistence<T> extends AbstractXmlPersistence<T, JarXmlSerial
 			adapter.getXmlSerializer().setDocument(document);
 
 			// Step 2: Update the element properties
-			return adapter.getXmlSerializer().deserialize(element, root);
-		} catch (Exception e) {
-			return false;
+			adapter.getXmlSerializer().deserialize(element, root);
 		} finally {
 			if (jar != null)
 				try {

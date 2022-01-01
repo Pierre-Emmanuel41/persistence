@@ -20,12 +20,12 @@ public abstract class AbstractSerializer<T> implements ISerializer<T> {
 	}
 
 	@Override
-	public boolean deserialize(T element, String path) {
+	public void deserialize(T element, String path) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean serialize(T element, String path) {
+	public void serialize(T element, String path) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 }

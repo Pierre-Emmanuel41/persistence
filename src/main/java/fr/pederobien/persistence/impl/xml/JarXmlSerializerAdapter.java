@@ -12,7 +12,7 @@ public class JarXmlSerializerAdapter<T> extends AbstractXmlSerializerAdapter<T> 
 	}
 
 	@Override
-	public boolean serialize(T element, String path) {
+	public void serialize(T element, String path) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 }

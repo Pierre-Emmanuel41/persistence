@@ -18,25 +18,19 @@ public class XmlSerializerAdapter<T> extends AbstractXmlSerializerAdapter<T> {
 	}
 
 	@Override
-	public boolean serialize(T element, String path) {
-		try {
-			Document document = persistence.getDocumentBuilder().newDocument();
-			document.setXmlStandalone(true);
-			getXmlSerializer().setDocument(document);
+	public void serialize(T element, String path) throws Exception {
+		Document document = persistence.getDocumentBuilder().newDocument();
+		document.setXmlStandalone(true);
+		getXmlSerializer().setDocument(document);
 
-			Element root = getXmlSerializer().createElement(ROOT);
-			document.appendChild(root);
+		Element root = getXmlSerializer().createElement(ROOT);
+		document.appendChild(root);
 
-			Element version = getXmlSerializer().createElement(VERSION);
-			version.appendChild(getXmlSerializer().createTextNode(getVersion().toString()));
-			root.appendChild(version);
+		Element version = getXmlSerializer().createElement(VERSION);
+		version.appendChild(getXmlSerializer().createTextNode(getVersion().toString()));
+		root.appendChild(version);
 
-			getXmlSerializer().serialize(element, root);
-			createFile(document, path);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+		getXmlSerializer().serialize(element, root);
+		createFile(document, path);
 	}
 }

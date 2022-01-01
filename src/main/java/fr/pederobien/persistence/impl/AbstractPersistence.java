@@ -35,13 +35,13 @@ public abstract class AbstractPersistence<T, U extends ISerializer<T>> implement
 	}
 
 	@Override
-	public boolean deserialize(T element, String path) {
+	public void deserialize(T element, String path) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean serialize(T element, double version, String path) {
-		return getSerializer(version).serialize(element, path.endsWith(extension) ? path : path.concat(extension));
+	public void serialize(T element, double version, String path) throws Exception {
+		getSerializer(version).serialize(element, path.endsWith(extension) ? path : path.concat(extension));
 	}
 
 	@Override

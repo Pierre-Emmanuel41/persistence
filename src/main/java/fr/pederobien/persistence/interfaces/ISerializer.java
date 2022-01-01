@@ -12,18 +12,14 @@ public interface ISerializer<T> {
 	 * 
 	 * @param element The element that contains data registered in the configuration file.
 	 * @param path    The path leading to the configuration file. It should contains the file name.
-	 * 
-	 * @return True if the element has been successfully updated, false otherwise.
 	 */
-	boolean deserialize(T element, String path);
+	void deserialize(T element, String path) throws Exception;
 
 	/**
 	 * Save the element properties in a file associated to the specified path.
 	 * 
 	 * @param element the element that contains informations to save.
 	 * @param path    The path leading to the configuration file. It should contains the file name.
-	 * 
-	 * @return True if the backup went well.
 	 */
-	boolean serialize(T element, String path);
+	void serialize(T element, String path) throws Exception;
 }

@@ -25,12 +25,10 @@ public interface IPersistence<T, U extends ISerializer<T>> {
 	 * @param element The element that contains data registered in the configuration file.
 	 * @param path    The path leading to the configuration file. It should contains the file name and the extension.
 	 * 
-	 * @return True if the element has been successfully updated, false otherwise.
-	 * 
 	 * @throws ExtensionException If the extension associated to the file to deserialize does not match with the extension of this
 	 *                            persistence.
 	 */
-	boolean deserialize(T element, String path);
+	void deserialize(T element, String path) throws Exception;
 
 	/**
 	 * Save the element properties in a file associated to the specified path. If the path does not end with the extension associated
@@ -40,11 +38,9 @@ public interface IPersistence<T, U extends ISerializer<T>> {
 	 * @param version The version in which the informations should be saved.
 	 * @param path    The path leading to the configuration file. It should contains the file name.
 	 * 
-	 * @return True if the save went well.
-	 * 
 	 * @throws SerializerNotFoundException If there are no serializer associated to the given version.
 	 */
-	boolean serialize(T element, double version, String path);
+	void serialize(T element, double version, String path) throws Exception;
 
 	/**
 	 * Register this serializer to this persistence. If there is already a serializer associated to the version of the given
